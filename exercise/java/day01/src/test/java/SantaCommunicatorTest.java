@@ -1,5 +1,3 @@
-import communication.Location;
-import communication.MessageInformations;
 import communication.Reindeer;
 import communication.SantaCommunicator;
 import doubles.TestLogger;
