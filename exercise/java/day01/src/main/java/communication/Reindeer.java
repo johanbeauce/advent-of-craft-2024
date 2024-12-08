@@ -1,4 +1,7 @@
 package communication;
 
-public record Reindeer(String name) {
+public record Reindeer(
+        String name,
+        String currentLocation,
+        int numbersOfDaysForComingBack) {
 }

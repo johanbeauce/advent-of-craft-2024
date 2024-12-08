@@ -23,29 +23,21 @@ class SantaCommunicatorTest {
 
         @BeforeEach
         void setup() {
-            communicator = new SantaCommunicator(numberOfDaysToRest);
+            communicator = new SantaCommunicator(numberOfDaysToRest, numberOfDayBeforeChristmas);
         }
 
         @Nested
         class And_a_message_informations {
 
-            private MessageInformations messageInformations;
             private int numbersOfDaysForComingBack;
             private Reindeer reindeer;
-            private Location currentLocation;
-
-            @BeforeEach
-            void setUp() {
-                reindeer = new Reindeer(DASHER);
-                currentLocation = new Location(NORTH_POLE);
-            }
 
             @Test
             void composeMessage() {
                 numbersOfDaysForComingBack = 5;
-                messageInformations = new MessageInformations(reindeer, currentLocation, numbersOfDaysForComingBack, numberOfDayBeforeChristmas);
+                reindeer = new Reindeer(DASHER, NORTH_POLE, numbersOfDaysForComingBack);
 
-                var composedMessage = communicator.composeMessage(messageInformations);
+                var composedMessage = communicator.composeMessage(reindeer);
 
                 assertThat(composedMessage)
                         .isEqualTo("Dear Dasher, please return from North Pole in 17 day(s) to be ready and rest before Christmas.");
@@ -54,29 +46,22 @@ class SantaCommunicatorTest {
             @Test
             void shouldDetectOverdueReindeer() {
                 numbersOfDaysForComingBack = numberOfDayBeforeChristmas;
-                messageInformations = new MessageInformations(reindeer, currentLocation, numbersOfDaysForComingBack, numberOfDayBeforeChristmas);
+                reindeer = new Reindeer(DASHER, NORTH_POLE, numbersOfDaysForComingBack);
 
-                var overdue = communicator.isOverdue(
-                        messageInformations,
-                        logger);
+                var overdue = communicator.isOverdue(reindeer, logger);
 
-                assertThat(overdue)
-                        .isTrue();
-                assertThat(logger.getLog())
-                        .isEqualTo("Overdue for Dasher located North Pole.");
+                assertThat(overdue).isTrue();
+                assertThat(logger.getLog()).isEqualTo("Overdue for Dasher located North Pole.");
             }
 
             @Test
             void shouldReturnFalseWhenNoOverdue() {
                 numbersOfDaysForComingBack = numberOfDaysToRest - 1;
-                messageInformations = new MessageInformations(reindeer, currentLocation, numbersOfDaysForComingBack, numberOfDayBeforeChristmas);
+                reindeer = new Reindeer(DASHER, NORTH_POLE, numbersOfDaysForComingBack);
 
-                var overdue = communicator.isOverdue(
-                        messageInformations,
-                        logger);
+                var overdue = communicator.isOverdue(reindeer, logger);
 
-                assertThat(overdue)
-                        .isFalse();
+                assertThat(overdue).isFalse();
             }
         }
     }

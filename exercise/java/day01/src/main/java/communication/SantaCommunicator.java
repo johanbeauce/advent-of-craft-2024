@@ -2,33 +2,35 @@ package communication;
 
 public class SantaCommunicator {
     private final int numberOfDaysToRest;
+    private final int numberOfDayBeforeChristmas;
 
-    public SantaCommunicator(int numberOfDaysToRest) {
+    public SantaCommunicator(int numberOfDaysToRest,
+                             int numberOfDayBeforeChristmas) {
         this.numberOfDaysToRest = numberOfDaysToRest;
+        this.numberOfDayBeforeChristmas = numberOfDayBeforeChristmas;
     }
 
-    public String composeMessage(MessageInformations messageInformations) {
-
-        var daysBeforeReturn = daysBeforeReturn(messageInformations.numbersOfDaysForComingBack(),
-                messageInformations.numberOfDaysBeforeChristmas());
+    public String composeMessage(Reindeer reindeer) {
+        var daysBeforeReturn = daysBeforeReturn(reindeer.numbersOfDaysForComingBack());
 
         return "Dear %s, please return from %s in %d day(s) to be ready and rest before Christmas.".formatted(
-                messageInformations.reindeer().name(),
-                messageInformations.currentLocation().name(),
+                reindeer.name(),
+                reindeer.currentLocation(),
                 daysBeforeReturn);
     }
 
-    public boolean isOverdue(MessageInformations messageInformations, Logger logger) {
-        if (daysBeforeReturn(messageInformations.numbersOfDaysForComingBack(), messageInformations.numberOfDaysBeforeChristmas()) <= 0) {
+    public boolean isOverdue(Reindeer reindeer,
+                             Logger logger) {
+        if (daysBeforeReturn(reindeer.numbersOfDaysForComingBack()) <= 0) {
             logger.log("Overdue for %s located %s.".formatted(
-                    messageInformations.reindeer().name(),
-                    messageInformations.currentLocation().name()));
+                    reindeer.name(),
+                    reindeer.currentLocation()));
             return true;
         }
         return false;
     }
 
-    private int daysBeforeReturn(int numbersOfDaysForComingBack, int numberOfDaysBeforeChristmas) {
-        return numberOfDaysBeforeChristmas - numbersOfDaysForComingBack - numberOfDaysToRest;
+    private int daysBeforeReturn(int numbersOfDaysForComingBack) {
+        return numberOfDayBeforeChristmas - numbersOfDaysForComingBack - numberOfDaysToRest;
     }
 }
