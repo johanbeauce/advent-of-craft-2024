@@ -21,19 +21,51 @@ import static io.vavr.test.Property.def;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FizzBuzzTests {
+    RulesManager rulesManager;
+    FizzBuzz fizzBuzz;
+
+    @Nested
+    class Given_new_rules {
+        @BeforeEach
+        void setUp() {
+            var rules = LinkedHashMap.of(
+                    11, "Bang",
+                    7, "Whizz");
+            rulesManager = new RulesManager(rules);
+            fizzBuzz = new FizzBuzz(rulesManager);
+        }
+
+        public static Stream<Arguments> validInputs() {
+            return Stream.of(
+                    Arguments.of(1, "1"),
+                    Arguments.of(6, "6"),
+                    Arguments.of(7, "Whizz"),
+                    Arguments.of(8, "8"),
+                    Arguments.of(10, "10"),
+                    Arguments.of(11, "Bang"),
+                    Arguments.of(12, "12"),
+                    Arguments.of(50, "50")
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("validInputs")
+        void parse_successfully_numbers_between_1_and_100_samples(int input, String expectedResult) {
+            assertThat(fizzBuzz.convert(input))
+                    .isEqualTo(Some(expectedResult));
+        }
+    }
 
     @Nested
     class Given_classic_rules {
-        RulesManager rulesManager;
-        FizzBuzz fizzBuzz;
 
         @BeforeEach
         void setUp() {
-            rulesManager = new RulesManager(LinkedHashMap.of(
+            var rules = LinkedHashMap.of(
                     15, "FizzBuzz",
                     3, "Fizz",
-                    5, "Buzz"
-            ));
+                    5, "Buzz");
+            rulesManager = new RulesManager(rules);
             fizzBuzz = new FizzBuzz(rulesManager);
         }
 
