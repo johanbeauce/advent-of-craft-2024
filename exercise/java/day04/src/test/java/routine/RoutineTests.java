@@ -53,12 +53,7 @@ class RoutineTests {
 
         @BeforeEach
         void setUp() {
-            emailService = new EmailService() {
-                @Override
-                public void readNewEmails() {
-                    isEmailServiceReadNewEmailsCalled = true;
-                }
-            };
+            emailService = () -> isEmailServiceReadNewEmailsCalled = true;
             scheduleService = new ScheduleService() {
                 @Override
                 public Schedule todaySchedule() {
@@ -76,12 +71,7 @@ class RoutineTests {
                     isScheduleServiceContinueDayCalled = true;
                 }
             };
-            reindeerFeeder = new ReindeerFeeder() {
-                @Override
-                public void feedReindeers() {
-                    isReindeerFeederFeedReindeersCalled = true;
-                }
-            };
+            reindeerFeeder = () -> isReindeerFeederFeedReindeersCalled = true;
         }
 
         @Test
